@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Will you be my Valentine?</title>
 
-  <!-- Confetti library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <style>
@@ -53,7 +52,6 @@
       width: min(260px, 80vw);
       margin: 0 auto 10px;
       display: block;
-      filter: drop-shadow(0 10px 14px rgba(0,0,0,.12));
     }
 
     h1 {
@@ -90,8 +88,6 @@
       color: #fff;
     }
 
-    #yesBtn:hover { background: var(--yesHover); }
-
     #noBtn {
       left: 62%;
       background: #e5e7eb;
@@ -115,12 +111,6 @@
       margin: 10px 0;
     }
 
-    .fireworks {
-      width: min(380px, 90vw);
-      margin: 0 auto;
-      display: block;
-    }
-
     @keyframes pop {
       from { transform: scale(.96); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
@@ -132,35 +122,6 @@
   <canvas id="confettiCanvas"></canvas>
 
   <main class="card">
-    <svg class="art" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="fur" x1="0" x2="1">
-          <stop offset="0" stop-color="#f7c7a1"/>
-          <stop offset="1" stop-color="#f2a97b"/>
-        </linearGradient>
-        <linearGradient id="heart" x1="0" x2="1">
-          <stop offset="0" stop-color="#ff4d7d"/>
-          <stop offset="1" stop-color="#ff1f68"/>
-        </linearGradient>
-      </defs>
-
-      <path d="M250 50 C250 33 270 25 282 38
-               C294 25 314 33 314 50
-               C314 78 282 92 282 106
-               C282 92 250 78 250 50Z"
-            fill="url(#heart)"/>
-
-      <path d="M90 120 C90 70 140 40 190 60
-               C240 40 290 70 290 120
-               C290 180 240 210 190 210
-               C140 210 90 180 90 120Z"
-            fill="url(#fur)"/>
-
-      <circle cx="160" cy="130" r="8"/>
-      <circle cx="220" cy="130" r="8"/>
-    </svg>
-
-    <!-- 💕 PERSONALIZED LINE -->
     <h1>Isabella 💕 will you be my Valentine?</h1>
 
     <section class="button-zone" id="zone">
@@ -171,12 +132,7 @@
     <div class="hint" id="hint">“No” seems a bit shy 😈</div>
 
     <section class="result" id="result">
-      <h2>YAY ISABELLA 🎉💖</h2>
-      <img
-        class="fireworks"
-        src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
-        alt="Fireworks"
-      />
+      <h2>YAY AZIZ 🎉💖</h2>
     </section>
   </main>
 
@@ -215,14 +171,12 @@
         if (Date.now() < end) requestAnimationFrame(frame);
       })();
 
-      setTimeout(() => {
-        confettiInstance({
-          particleCount: 300,
-          spread: 140,
-          startVelocity: 60,
-          origin: { x: 0.5, y: 0.55 }
-        });
-      }, 300);
+      confettiInstance({
+        particleCount: 250,
+        spread: 140,
+        startVelocity: 60,
+        origin: { x: 0.5, y: 0.55 }
+      });
     }
 
     let yesScale = 1;
@@ -253,6 +207,10 @@
 
       noBtn.style.left = newLeft + "px";
       noBtn.style.top = newTop + "px";
+
+      // 😈 TEXT CHANGES EVERY TIME
+      noBtn.textContent = ["Nope", "Try again 😏", "Missed me", "Almost", "Not today 😈"]
+        [Math.floor(Math.random() * 5)];
 
       growYes();
     }
