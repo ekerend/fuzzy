@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Will you be my Valentine?</title>
 
-  <!-- Confetti library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <style>
@@ -74,6 +73,7 @@
       cursor: pointer;
       box-shadow: 0 10px 24px rgba(0,0,0,.14);
       user-select: none;
+      -webkit-tap-highlight-color: transparent;
       transition: transform .12s ease, background .12s ease;
     }
 
@@ -153,8 +153,8 @@
 
     function resizeConfettiCanvas() {
       const dpr = Math.max(1, window.devicePixelRatio || 1);
-      confettiCanvas.width = window.innerWidth * dpr;
-      confettiCanvas.height = window.innerHeight * dpr;
+      confettiCanvas.width = Math.floor(window.innerWidth * dpr);
+      confettiCanvas.height = Math.floor(window.innerHeight * dpr);
     }
 
     resizeConfettiCanvas();
@@ -173,6 +173,7 @@
           particleCount: 12,
           spread: 90,
           startVelocity: 45,
+          ticks: 180,
           origin: { x: Math.random(), y: Math.random() * 0.3 }
         });
         if (Date.now() < end) requestAnimationFrame(frame);
@@ -183,6 +184,7 @@
           particleCount: 300,
           spread: 140,
           startVelocity: 60,
+          ticks: 220,
           origin: { x: 0.5, y: 0.55 }
         });
       }, 300);
@@ -216,14 +218,16 @@
 
       noBtn.style.left = newLeft + "px";
       noBtn.style.top = newTop + "px";
+      noBtn.style.transform = "none";
 
-      noBtn.textContent = ["Nope", "Try again 😏", "Missed me", "Almost", "Not today 😈"]
-        [Math.floor(Math.random() * 5)];
+      // Change the text every time it escapes
+      noBtn.textContent = ["Nope", "Try again 😏", "Missed me", "Almost", "Not today 😈"][Math.floor(Math.random() * 5)];
 
       growYes();
     }
 
-    zone.addEventListener("pointermove", e => {
+    // Runs away when you get close (mouse/trackpad)
+    zone.addEventListener("pointermove", (e) => {
       const b = noBtn.getBoundingClientRect();
       const d = Math.hypot(
         (b.left + b.width / 2) - e.clientX,
@@ -232,10 +236,21 @@
       if (d < 140) moveNo(e.clientX, e.clientY);
     });
 
+    // ✅ NEW: Runs away when you TAP/CLICK the No button (great for phones)
+    noBtn.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      // use the tap location if available; fallback to center of screen
+      const x = e.clientX || window.innerWidth / 2;
+      const y = e.clientY || window.innerHeight / 2;
+      moveNo(x, y);
+    });
+
+    // Yes click
     yesBtn.addEventListener("click", () => {
       zone.style.display = "none";
       hint.style.display = "none";
       result.style.display = "block";
+      resizeConfettiCanvas();
       fullScreenConfetti();
     });
   </script>
